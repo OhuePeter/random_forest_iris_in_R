@@ -1,0 +1,50 @@
+---
+title: "RandomForest_iris"
+output: html_document
+---
+
+```{r}
+## Random Forest with iris data set ##
+data(iris)
+iris
+str(iris)
+summary(iris)
+````
+
+## libraries
+```{r}
+library(e1071)
+library(rpart)
+library(rpart.plot)
+library(caTools)
+library(caret)
+```
+# Split data
+```{r}
+split <- sample.split(iris, SplitRatio = 0.75)
+split
+
+train <- subset(iris, split=="TRUE")
+test <- subset(iris, split=="FALSE")
+```
+# TRAINING the model
+```{r}
+# Install and require randomForest
+#install.packages("randomForest")
+library(randomForest)
+set.seed(100)   # important in random forest
+
+# Create the classifier
+classifier = randomForest(x=train[-5],
+                          y=train$Species,
+                          ntree = 500)
+```
+# Prediction
+```{r}
+y_pred <- predict(classifier, newdata = test[-5])
+
+# See confusion matrix
+cm <- table(test[, 5], y_pred)
+cm
+```
+```
